@@ -7,3 +7,4 @@ web/node_modules
 supergroup.mixin.one
 
 !config/config.gocfg
+.DS_Store

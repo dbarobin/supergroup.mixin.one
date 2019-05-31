@@ -30,6 +30,15 @@
     "unsubscribe": "取消订阅群组",
     "browser": "浏览群组成员",
     "red.packet": "发红包",
+    "official": "官网",
+    "blog": "博客",
+    "exinone": "ExinOne",
+    "exinpool": "ExinPool",
+    "c2c": "C2C",
+    "flash": "币币",
+    "invest": "定投",
+    "exinpay": "ExinPay",
+    "interest": "余币宝",
     "loading": "加载更多"
   },
   "operator": {

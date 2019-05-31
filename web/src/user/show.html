@@ -2,23 +2,65 @@
   <div class="members">
   </div>
   <div class="actions">
-    <div class="action subscribe">
-      <a href="javascript:;" class="btn">
-        {{t 'user.subscribe'}}
-      </a>
-    </div>
-    <div class="action unsubscribe">
-      <a href="javascript:;" class="btn">
-        {{t 'user.unsubscribe'}}
-      </a>
-    </div>
+    <a href="javascript:;" class="action subscribe btn">
+      <div class="action-icon"></div>
+      <span class="action-name" >{{t 'user.subscribe'}}</span>
+    </a>
+    <a href="javascript:;" class="action unsubscribe btn">
+      <div class="action-icon"></div>
+      <span class="action-name" >{{t 'user.unsubscribe'}}</span>
+    </a>
     <a href="/subscribers" class="action btn subscriber" data-navigo>
-      {{t 'user.browser'}}
+      <div class="action-icon"></div>
+      <span class="action-name">{{t 'user.browser'}}</span>
     </a>
     {{#if isMixin}}
     <a href="/prepare" class="action btn red-packet" data-navigo>
-      {{t 'user.red.packet'}}
+      <div class="action-icon"></div>
+      <span class="action-name">{{t 'user.red.packet'}}</span>
     </a>
     {{/if}}
+  </div>
+  <div class="actions">
+    <a href="https://exinone.com" class="action btn exinone" data-navigo>
+      <div class="action-icon"></div>
+      <span class="action-name">{{t 'user.exinone'}}</span>
+    </a>
+    <a href="https://exinpool.com" class="action btn exinpool" data-navigo>
+      <div class="action-icon"></div>
+      <span class="action-name">{{t 'user.exinpool'}}</span>
+    </a>
+  </div>
+  <div class="actions">
+    <a href="https://exinone.com/#/exchange/otc" class="action btn c2c" data-navigo>
+      <div class="action-icon"></div>
+      <span class="action-name">{{t 'user.c2c'}}</span>
+    </a>
+    <a href="https://exinone.com/#/exchange/flash" class="action btn flash" data-navigo>
+      <div class="action-icon"></div>
+      <span class="action-name">{{t 'user.flash'}}</span>
+    </a>
+    <a href="https://exinone.com/#/exchange/invest" class="action btn invest" data-navigo>
+      <div class="action-icon"></div>
+      <span class="action-name">{{t 'user.invest'}}</span>
+    </a>
+    <a href="https://exinone.com/#/wallet" class="action btn exinpay" data-navigo>
+      <div class="action-icon"></div>
+      <span class="action-name">{{t 'user.exinpay'}}</span>
+    </a>
+    <a href="https://exinone.com/#/interestAccount" class="action btn interest" data-navigo>
+      <div class="action-icon"></div>
+      <span class="action-name">{{t 'user.interest'}}</span>
+    </a>
+  </div>
+  <div class="actions">
+    <a href="https://exin.one" class="action btn official" data-navigo>
+      <div class="action-icon"></div>
+      <span class="action-name">{{t 'user.official'}}</span>
+    </a>
+    <a href="https://blog.exin.one" class="action btn blog" data-navigo>
+      <div class="action-icon"></div>
+      <span class="action-name">{{t 'user.blog'}}</span>
+    </a>
   </div>
 </main>
