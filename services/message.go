@@ -518,6 +518,16 @@ func sendHelpMessge(ctx context.Context, user *models.User, mc *MessageContext, 
 	return nil
 }
 
+func sendExinEarnMessge(ctx context.Context, user *models.User, mc *MessageContext, message *MessageView) error {
+	if err := sendAppButton(ctx, mc, config.AppConfig.MessageTemplate.MessageExinEarnGuide, message.ConversationId, config.AppConfig.Service.ExinEarnHost); err != nil {
+		return err
+	}
+	if err := sendTextMessage(ctx, mc, message.ConversationId, config.AppConfig.MessageTemplate.MessageExinEarnHelp); err != nil {
+		return err
+	}
+	return nil
+}
+
 type tmap struct {
 	mutex sync.Mutex
 	m     map[string]mixinTransaction
