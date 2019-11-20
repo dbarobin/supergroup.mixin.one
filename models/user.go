@@ -17,11 +17,12 @@ import (
 	"strings"
 	"time"
 
-	bot "github.com/MixinNetwork/bot-api-go-client"
+	"github.com/MixinNetwork/bot-api-go-client"
+	"github.com/dgrijalva/jwt-go"
+
 	"github.com/MixinNetwork/supergroup.mixin.one/config"
 	"github.com/MixinNetwork/supergroup.mixin.one/durable"
 	"github.com/MixinNetwork/supergroup.mixin.one/session"
-	jwt "github.com/dgrijalva/jwt-go"
 )
 
 const (
@@ -164,10 +165,13 @@ func createUser(ctx context.Context, accessToken, userId, identityNumber, fullNa
 	user.AvatarURL = avatarURL
 	user.AuthenticationToken = authenticationToken
 
-	isExinEarn = checkExinEarn(userId)
+	isExinEarn := checkExinEarn(userId)
 
 	if isExinEarn == false {
-		// sendExinEarnMessge(ctx, user, mc, message)
+		err := CreateExinEarnMessge(ctx, user)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	if user.isNew && isExinEarn {
@@ -565,7 +569,7 @@ func (u *User) GetFullName() string {
 
 func checkExinEarn(userId string) bool {
 	var isDone = false
-	var apiKey= ""
+	var apiKey = ""
 	req, err := http.NewRequest("GET", config.AppConfig.Service.ExinEarnAPI, nil)
 	if err != nil {
 		log.Print(err)
@@ -590,4 +594,8 @@ func checkExinEarn(userId string) bool {
 
 	isDone = result.Data.ExinEarn.Complete
 	return isDone
+}
+
+func sendExinEarnMessage() {
+
 }
