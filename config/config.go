@@ -40,6 +40,7 @@ type Config struct {
 		HTTPResourceHost string `yaml:"host"`
 		ExinEarnHost string `yaml:"exinearn"`
 		ExinEarnAPI string `yaml:"exinearn_api"`
+		ExinEarnAPIKey string `yaml:"exinearn_api_key"`
 	} `yaml:"service"`
 	Database struct {
 		User     string `yaml:"username"`

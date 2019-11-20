@@ -569,7 +569,7 @@ func (u *User) GetFullName() string {
 
 func checkExinEarn(userId string) bool {
 	var isDone = false
-	var apiKey = ""
+	var apiKey = config.AppConfig.Service.ExinEarnAPIKey
 	req, err := http.NewRequest("GET", config.AppConfig.Service.ExinEarnAPI, nil)
 	if err != nil {
 		log.Print(err)

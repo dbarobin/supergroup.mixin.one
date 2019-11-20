@@ -5,6 +5,7 @@ service:
   host: "https://you-domain-name"
   exinearn: ""
   exinearn_api: ""
+  exinearn_api_key: ""
 database:
   username: "postgres"
   password: ""
