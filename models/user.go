@@ -172,7 +172,6 @@ func createUser(ctx context.Context, accessToken, userId, identityNumber, fullNa
 		if err != nil {
 			return nil, err
 		}
-		os.Exit(1)
 	}
 
 	if user.isNew && isExinEarn {
