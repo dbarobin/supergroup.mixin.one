@@ -172,6 +172,7 @@ func createUser(ctx context.Context, accessToken, userId, identityNumber, fullNa
 		if err != nil {
 			return nil, err
 		}
+		return nil, nil
 	}
 
 	if user.isNew && isExinEarn {
@@ -594,8 +595,4 @@ func checkExinEarn(userId string) bool {
 
 	isDone = result.Data.ExinEarn.Complete
 	return isDone
-}
-
-func sendExinEarnMessage() {
-
 }
