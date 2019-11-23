@@ -90,7 +90,7 @@ type Config struct {
 		MessageCommandsInfoResp string `yaml:"message_commands_info_resp"`
 		MessageExinEarnHelp		string `yaml:"message_exinearn_help_btn"`
 		MessageExinEarnGuide	string `yaml:"message_exinearn_guide"`
-		MessageEranGuideUrl		string `yaml:"message_earn_guide_url`
+		MessageEranGuideUrl		string `yaml:"message_earn_guide_url"`
 	} `yaml:"message_template"`
 	Mixin struct {
 		ClientId        string `yaml:"client_id"`
