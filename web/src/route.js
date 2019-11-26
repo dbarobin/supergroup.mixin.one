@@ -9,6 +9,7 @@ import PreparePacket from './pages/PreparePacket'
 import Packet from './pages/Packet'
 import Members from './pages/Members'
 import Messages from './pages/Messages'
+import Task from './pages/Task'
 import { ROUTER_MODE } from '@/constants.js'
 
 Vue.use(VueRouter)
@@ -23,6 +24,7 @@ const routes = [
   { path: '/members/', component: Members },
   { path: '/messages/', component: Messages },
   { path: '/auth', component: Auth },
+  { path: '/task', component: Task },
 ]
 
 const router = new VueRouter({

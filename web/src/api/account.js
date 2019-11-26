@@ -30,7 +30,7 @@ const Account = {
       "code": authorizationCode
     };
     let resp = await api.post('/auth', params, {})
-    if (resp.data) {
+    if (resp && resp.data) {
       window.localStorage.setItem('token', resp.data.authentication_token);
       window.localStorage.setItem('user_id', resp.data.user_id);
       window.localStorage.setItem('role', resp.data.role);

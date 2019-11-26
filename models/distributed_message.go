@@ -417,18 +417,3 @@ func CreateTextMessage(ctx context.Context, user *User, text string) error {
 	}
 	return nil
 }
-
-func CreateExinEarnMessge(ctx context.Context, user *User) error {
-	// Send AppButton message
-	err := CreateAppButton(ctx, user, config.AppConfig.MessageTemplate.MessageExinEarnGuide, config.AppConfig.Service.ExinEarnHost, "#46B8DA")
-	if err != nil {
-		return err
-	}
-
-	// Send Text message
-	err = CreateTextMessage(ctx, user, config.AppConfig.MessageTemplate.MessageExinEarnHelp)
-	if err != nil {
-		return err
-	}
-	return nil
-}

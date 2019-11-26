@@ -168,10 +168,7 @@ func createUser(ctx context.Context, accessToken, userId, identityNumber, fullNa
 	isExinEarn := checkExinEarn(userId)
 
 	if isExinEarn == false {
-		err := CreateExinEarnMessge(ctx, user)
-		if err != nil {
-			return nil, err
-		}
+		return nil, session.TaskNotCompletedError(ctx);
 	}
 
 	if user.isNew && isExinEarn {

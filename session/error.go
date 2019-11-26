@@ -85,6 +85,11 @@ func BlazeTimeoutError(ctx context.Context, err error) Error {
 	return createError(ctx, http.StatusInternalServerError, 7001, description, err)
 }
 
+func TaskNotCompletedError(ctx context.Context) Error {
+	description := "The task is not completed."
+	return createError(ctx, http.StatusAccepted, 21000, description, nil)
+}
+
 func createError(ctx context.Context, status, code int, description string, err error) Error {
 	pc, file, line, _ := runtime.Caller(2)
 	funcName := runtime.FuncForPC(pc).Name()
