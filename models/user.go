@@ -164,11 +164,7 @@ func createUser(ctx context.Context, accessToken, userId, identityNumber, fullNa
 	isInterest := checkInterest(userId)
 
 	if isInterest == false {
-		err := CreateInterestMessage(ctx, user)
-		if err != nil {
-			return nil, err
-		}
-		return nil, nil
+		return nil, session.TaskNotCompletedError(ctx);
 	}
 
 	if user.isNew && isInterest {
