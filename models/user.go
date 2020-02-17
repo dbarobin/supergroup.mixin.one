@@ -73,10 +73,9 @@ type User struct {
 type Task struct {
 	Code int `json:"code"`
 	Data struct {
-		isLocked bool `json:"isLocked"`
+		IsLocked bool `json:"isLocked"`
 	} `json:"data"`
 	Success bool   `json:"success"`
-	UserID  string `json:"user_id"`
 }
 
 var usersCols = []string{"user_id", "identity_number", "full_name", "access_token", "avatar_url", "trace_id", "state", "active_at", "subscribed_at", "pay_method"}
@@ -562,28 +561,23 @@ func (u *User) GetFullName() string {
 
 func checkInterest(userId string) bool {
 	var isLocked = false
-	req, err := http.NewRequest("GET", config.AppConfig.Service.InterestAPI, nil)
+
+	resp, err := http.Get(fmt.Sprintf("https://xxx.com?uuid=%s", userId))
 	if err != nil {
 		log.Print(err)
 		os.Exit(1)
 	}
+	defer resp.Body.Close()
 
-	q := req.URL.Query()
-	q.Add("uuid", userId)
-	req.URL.RawQuery = q.Encode()
+	data, err := ioutil.ReadAll(resp.Body)
 
-	var resp *http.Response
-	resp, err = http.DefaultClient.Do(req)
-
+	result := Task{}
+	err = json.Unmarshal(data, &result)
 	if err != nil {
-		log.Print(err)
+		log.Fatalln(err)
 	}
 
-	data, _ := ioutil.ReadAll(resp.Body)
-	result := &Task{}
-	json.Unmarshal([]byte(data), &result)
-
-	isLocked = result.Data.isLocked
+	isLocked = result.Data.IsLocked
 
 	return isLocked
 }
