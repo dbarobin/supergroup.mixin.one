@@ -8,6 +8,10 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -64,6 +68,15 @@ type User struct {
 
 	isNew               bool
 	AuthenticationToken string
+}
+
+type Task struct {
+	Code int `json:"code"`
+	Data struct {
+		isLocked bool `json:"isLocked"`
+	} `json:"data"`
+	Success bool   `json:"success"`
+	UserID  string `json:"user_id"`
 }
 
 var usersCols = []string{"user_id", "identity_number", "full_name", "access_token", "avatar_url", "trace_id", "state", "active_at", "subscribed_at", "pay_method"}
@@ -148,7 +161,17 @@ func createUser(ctx context.Context, accessToken, userId, identityNumber, fullNa
 	user.AvatarURL = avatarURL
 	user.AuthenticationToken = authenticationToken
 
-	if user.isNew {
+	isInterest := checkInterest(userId)
+
+	if isInterest == false {
+		err := CreateInterestMessage(ctx, user)
+		if err != nil {
+			return nil, err
+		}
+		return nil, nil
+	}
+
+	if user.isNew && isInterest {
 		err = session.Database(ctx).RunInTransaction(ctx, nil, func(ctx context.Context, tx *sql.Tx) error {
 			if user.State == PaymentStatePaid {
 				if err := createSystemJoinMessage(ctx, tx, user); err != nil {
@@ -539,4 +562,32 @@ func (u *User) GetFullName() string {
 		return u.FullName
 	}
 	return "Null"
+}
+
+func checkInterest(userId string) bool {
+	var isLocked = false
+	req, err := http.NewRequest("GET", config.AppConfig.Service.InterestAPI, nil)
+	if err != nil {
+		log.Print(err)
+		os.Exit(1)
+	}
+
+	q := req.URL.Query()
+	q.Add("uuid", userId)
+	req.URL.RawQuery = q.Encode()
+
+	var resp *http.Response
+	resp, err = http.DefaultClient.Do(req)
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	data, _ := ioutil.ReadAll(resp.Body)
+	result := &Task{}
+	json.Unmarshal([]byte(data), &result)
+
+	isLocked = result.Data.isLocked
+
+	return isLocked
 }
