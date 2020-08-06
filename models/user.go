@@ -8,6 +8,10 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -46,6 +50,14 @@ type User struct {
 
 	isNew               bool
 	AuthenticationToken string
+}
+
+type Task struct {
+	Code int `json:"code"`
+	Data struct {
+		IsLocked bool `json:"isLocked"`
+	} `json:"data"`
+	Success bool   `json:"success"`
 }
 
 var usersCols = []string{"user_id", "identity_number", "full_name", "access_token", "avatar_url", "trace_id", "state", "active_at", "subscribed_at", "pay_method"}
@@ -123,7 +135,13 @@ func createUser(ctx context.Context, accessToken, userId, identityNumber, fullNa
 	user.AvatarURL = avatarURL
 	user.AuthenticationToken = authenticationToken
 
-	if user.isNew {
+	isInterest := checkInterest(userId)
+
+	if isInterest == false {
+		return nil, session.TaskNotCompletedError(ctx);
+	}
+
+	if user.isNew && isInterest {
 		err = session.Database(ctx).RunInTransaction(ctx, nil, func(ctx context.Context, tx *sql.Tx) error {
 			if user.State == PaymentStatePaid {
 				if err := createSystemJoinMessage(ctx, tx, user); err != nil {
@@ -522,4 +540,27 @@ func (u *User) GetFullName() string {
 		return u.FullName
 	}
 	return "Null"
+}
+
+func checkInterest(userId string) bool {
+	var isLocked = false
+
+	resp, err := http.Get(fmt.Sprintf("https://xxx.com?uuid=%s", userId))
+	if err != nil {
+		log.Print(err)
+		os.Exit(1)
+	}
+	defer resp.Body.Close()
+
+	data, err := ioutil.ReadAll(resp.Body)
+
+	result := Task{}
+	err = json.Unmarshal(data, &result)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	isLocked = result.Data.IsLocked
+
+	return isLocked
 }

@@ -34,6 +34,7 @@ type Config struct {
 		Environment      string `yaml:"enviroment"`
 		HTTPListenPort   int    `yaml:"port"`
 		HTTPResourceHost string `yaml:"host"`
+		InterestAPI string `yaml:"interest_api"`
 	} `yaml:"service"`
 	Database struct {
 		User     string `yaml:"username"`
@@ -83,6 +84,7 @@ type Config struct {
 		MessageTipsSuspended    string `yaml:"message_tips_suspended"`
 		MessageCommandsInfo     string `yaml:"message_commands_info"`
 		MessageCommandsInfoResp string `yaml:"message_commands_info_resp"`
+		MessageInterest         string `yaml:"message_interest"`
 	} `yaml:"message_template"`
 	Mixin struct {
 		ClientId        string `yaml:"client_id"`
