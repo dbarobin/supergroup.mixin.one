@@ -9,6 +9,7 @@ import PreparePacket from './pages/PreparePacket'
 import Packet from './pages/Packet'
 import Members from './pages/Members'
 import Messages from './pages/Messages'
+import Task from './pages/Task'
 import PageNotFound from './pages/PageNotFound'
 import { ROUTER_MODE } from '@/constants.js'
 
@@ -24,6 +25,7 @@ const routes = [
   { path: '/members/', component: Members },
   { path: '/messages/', component: Messages },
   { path: '/auth', component: Auth },
+  { path: '/task', component: Task },
   { path: "*", component: PageNotFound },
 ]
 

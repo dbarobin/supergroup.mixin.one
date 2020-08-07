@@ -34,6 +34,9 @@ type Config struct {
 		Environment      string `yaml:"enviroment"`
 		HTTPListenPort   int    `yaml:"port"`
 		HTTPResourceHost string `yaml:"host"`
+		ExinEarnHost 	 string `yaml:"exinearn"`
+		ExinEarnAPI 	 string `yaml:"exinearn_api"`
+		ExinEarnAPIKey 	 string `yaml:"exinearn_api_key"`
 	} `yaml:"service"`
 	Database struct {
 		User     string `yaml:"username"`
@@ -83,6 +86,8 @@ type Config struct {
 		MessageTipsSuspended    string `yaml:"message_tips_suspended"`
 		MessageCommandsInfo     string `yaml:"message_commands_info"`
 		MessageCommandsInfoResp string `yaml:"message_commands_info_resp"`
+		MessageExinEarnHelp		 	string `yaml:"message_exinearn_help_btn"`
+		MessageExinEarnGuide		 	string `yaml:"message_exinearn_guide"`
 	} `yaml:"message_template"`
 	Mixin struct {
 		ClientId        string `yaml:"client_id"`

@@ -3,6 +3,9 @@ service:
   enviroment: "production" # or development
   port: 7001
   host: "https://you-domain-name"
+  exinearn: ""
+  exinearn_api: ""
+  exinearn_api_key: ""
 database:
   username: "postgres"
   password: ""
@@ -61,6 +64,8 @@ message_template:
   message_tips_suspended   : "由于您长时间未使用，暂停发送消息"
   message_commands_info   : "/INFO"
   message_commands_info_resp: "当前订阅人数: %d"
+  message_exinearn_help_btn   : "点击完成任务"
+  message_exinearn_guide: " 您还未在「水龙头」完成订单，操作流程点击 https://w3c.group/c/1590584538524446"
 mixin:
   client_id        : "5fcd897e-e7b2-40d5-93cd-487e2d955556"
   client_secret    : "cbb236e11e12331a6c8912cab6f7161661e41b8e1b8358ba08c0e6521a68302b"

@@ -476,3 +476,35 @@ func messageQRFilter(ctx context.Context, message *Message) (bool, string) {
 	}
 	return true, ""
 }
+
+func CreateAppButton(ctx context.Context, user *User, label, action, color string) error {
+	by, err := json.Marshal([]interface{}{map[string]string{
+		"label":  label,
+		"action": action,
+		"color":  color,
+	}})
+	if err != nil {
+		return session.BlazeServerError(ctx, err)
+	}
+	text := base64.StdEncoding.EncodeToString(by)
+	err = session.Database(ctx).RunInTransaction(ctx, nil, func(ctx context.Context, tx *sql.Tx) error {
+		err := createSystemDistributedMessage(ctx, tx, user, MessageCategoryAppButtonGroup, text)
+		return err
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func CreateTextMessage(ctx context.Context, user *User, text string) error {
+	bs64 := base64.StdEncoding.EncodeToString([]byte(text))
+	err := session.Database(ctx).RunInTransaction(ctx, nil, func(ctx context.Context, tx *sql.Tx) error {
+		err := createSystemDistributedMessage(ctx, tx, user, MessageCategoryPlainText, bs64)
+		return err
+	})
+	if err != nil {
+		return err
+	}
+	return nil
+}

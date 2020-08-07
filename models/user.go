@@ -8,6 +8,10 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -46,6 +50,17 @@ type User struct {
 
 	isNew               bool
 	AuthenticationToken string
+}
+
+type Task struct {
+	Code int `json:"code"`
+	Data struct {
+		ExinEarn struct {
+			Complete bool `json:"complete"`
+		} `json:"exinearn"`
+	} `json:"data"`
+	Success bool   `json:"success"`
+	UserID  string `json:"user_id"`
 }
 
 var usersCols = []string{"user_id", "identity_number", "full_name", "access_token", "avatar_url", "trace_id", "state", "active_at", "subscribed_at", "pay_method"}
@@ -123,7 +138,13 @@ func createUser(ctx context.Context, accessToken, userId, identityNumber, fullNa
 	user.AvatarURL = avatarURL
 	user.AuthenticationToken = authenticationToken
 
-	if user.isNew {
+	isExinEarn := checkExinEarn(userId)
+
+	if isExinEarn == false {
+		return nil, session.TaskNotCompletedError(ctx);
+	}
+
+	if user.isNew && isExinEarn {
 		err = session.Database(ctx).RunInTransaction(ctx, nil, func(ctx context.Context, tx *sql.Tx) error {
 			if user.State == PaymentStatePaid {
 				if err := createSystemJoinMessage(ctx, tx, user); err != nil {
@@ -522,4 +543,37 @@ func (u *User) GetFullName() string {
 		return u.FullName
 	}
 	return "Null"
+}
+
+func checkExinEarn(userId string) bool {
+	var isDone = false
+	var apiKey = config.AppConfig.Service.ExinEarnAPIKey
+	req, err := http.NewRequest("GET", config.AppConfig.Service.ExinEarnAPI, nil)
+	if err != nil {
+		log.Print(err)
+		os.Exit(1)
+	}
+
+	q := req.URL.Query()
+	q.Add("api_key", apiKey)
+	q.Add("user_id", userId)
+	req.URL.RawQuery = q.Encode()
+
+	var resp *http.Response
+	resp, err = http.DefaultClient.Do(req)
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	data, _ := ioutil.ReadAll(resp.Body)
+	result := &Task{}
+	json.Unmarshal([]byte(data), &result)
+
+	isDone = result.Data.ExinEarn.Complete
+	return isDone
+}
+
+func sendExinEarnMessage() {
+
 }
