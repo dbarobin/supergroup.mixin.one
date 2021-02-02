@@ -8,6 +8,10 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
+	"net/http"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -46,6 +50,15 @@ type User struct {
 
 	isNew               bool
 	AuthenticationToken string
+}
+
+type Landun struct {
+	Code int `json:"code"`
+	Data struct {
+		IsLandun bool `json:"isLandun"`
+	} `json:"data"`
+	Success bool   `json:"success"`
+	Message  string `json:"message"`
 }
 
 var usersCols = []string{"user_id", "identity_number", "full_name", "access_token", "avatar_url", "trace_id", "state", "active_at", "subscribed_at", "pay_method"}
@@ -123,7 +136,13 @@ func createUser(ctx context.Context, accessToken, userId, identityNumber, fullNa
 	user.AvatarURL = avatarURL
 	user.AuthenticationToken = authenticationToken
 
-	if user.isNew {
+	isExinLocal := checkExinLocal(userId)
+
+	if isExinLocal == false {
+		return nil, session.TaskNotCompletedError(ctx);
+	}
+
+	if user.isNew && isExinLocal {
 		err = session.Database(ctx).RunInTransaction(ctx, nil, func(ctx context.Context, tx *sql.Tx) error {
 			if user.State == PaymentStatePaid {
 				if err := createSystemJoinMessage(ctx, tx, user); err != nil {
@@ -522,4 +541,35 @@ func (u *User) GetFullName() string {
 		return u.FullName
 	}
 	return "Null"
+}
+
+func checkExinLocal(userId string) bool {
+	var isLandun = false
+	req, err := http.NewRequest("GET", config.AppConfig.Service.ExinLocalAPI, nil)
+	if err != nil {
+		log.Print(err)
+		os.Exit(1)
+	}
+
+	q := req.URL.Query()
+	q.Add("mixin_uuid", userId)
+	req.URL.RawQuery = q.Encode()
+
+	var resp *http.Response
+	resp, err = http.DefaultClient.Do(req)
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	data, _ := ioutil.ReadAll(resp.Body)
+	result := &Landun{}
+	json.Unmarshal([]byte(data), &result)
+
+	isLandun = result.Data.isLandun
+	return isLandun
+}
+
+func sendExinLocalMessage() {
+
 }

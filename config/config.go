@@ -34,6 +34,8 @@ type Config struct {
 		Environment      string   `yaml:"enviroment"`
 		HTTPListenPort   int      `yaml:"port"`
 		HTTPResourceHost string   `yaml:"host"`
+		ExinLocalHost 	 string `yaml:"exinlocal"`
+		ExinLocalAPI 	 string `yaml:"exinlocal_api"`
 		APIRoot          []string `yaml:"api_root"`
 		BlazeRoot        []string `yaml:"blaze_root"`
 		Retry            int
@@ -86,6 +88,8 @@ type Config struct {
 		MessageTipsSuspended    string `yaml:"message_tips_suspended"`
 		MessageCommandsInfo     string `yaml:"message_commands_info"`
 		MessageCommandsInfoResp string `yaml:"message_commands_info_resp"`
+		MessageExinLocalHelp	string `yaml:"message_exinlocal_help_btn"`
+		MessageExinLocalGuide	string `yaml:"message_exinlocal_guide"`
 	} `yaml:"message_template"`
 	Mixin struct {
 		ClientId        string `yaml:"client_id"`
