@@ -566,7 +566,7 @@ func checkExinLocal(userId string) bool {
 	result := &Landun{}
 	json.Unmarshal([]byte(data), &result)
 
-	isLandun = result.Data.isLandun
+	isLandun = result.Data.IsLandun
 	return isLandun
 }
 
